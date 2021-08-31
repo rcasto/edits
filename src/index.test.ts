@@ -1,12 +1,24 @@
 import { editDistance } from './index';
 import { EDIT_RECORD_TYPE, IEditDistanceResult } from './schema';
 
+it('can handle not returning edit records', () => {
+    const expectedResult: IEditDistanceResult = {
+        distance: 1,
+        records: undefined,
+    };
+    const result = editDistance('a', 'b');
+
+    expect(result).toEqual(expectedResult);
+});
+
 it('can handle empty strings', () => {
     const expectedResult: IEditDistanceResult = {
         distance: 0,
         records: [],
     };
-    const result = editDistance('', '');
+    const result = editDistance('', '', {
+        returnEditRecords: true,
+    });
 
     expect(result).toEqual(expectedResult);
 });
@@ -26,7 +38,9 @@ it('can handle delete edit', () => {
             },
         }],
     };
-    const result = editDistance('a', '');
+    const result = editDistance('a', '', {
+        returnEditRecords: true,
+    });
 
     expect(result).toEqual(expectedResult);
 });
@@ -46,7 +60,9 @@ it('can handle add edit', () => {
             },
         }],
     };
-    const result = editDistance('', 'a');
+    const result = editDistance('', 'a', {
+        returnEditRecords: true,
+    });
 
     expect(result).toEqual(expectedResult);
 });
@@ -66,7 +82,9 @@ it('can handle replace edit', () => {
             },
         }],
     };
-    const result = editDistance('a', 'b');
+    const result = editDistance('a', 'b', {
+        returnEditRecords: true,
+    });
 
     expect(result).toEqual(expectedResult);
 });
@@ -86,7 +104,9 @@ it('can handle match edit', () => {
             },
         }],
     };
-    const result = editDistance('a', 'a');
+    const result = editDistance('a', 'a', {
+        returnEditRecords: true,
+    });
 
     expect(result).toEqual(expectedResult);
 });
@@ -136,7 +156,9 @@ it('can handle multiple edits together', () => {
             },
         }],
     };
-    const result = editDistance('ae', 'abcd');
+    const result = editDistance('ae', 'abcd', {
+        returnEditRecords: true,
+    });
 
     expect(result).toEqual(expectedResult);
 });
