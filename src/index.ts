@@ -10,6 +10,22 @@ const EDIT_RECORD_TYPES = {
     DELETE: 'delete',
 };
 
+interface IEditRecordDetails {
+    index: number;
+    value: string;
+}
+
+export interface IEditRecord {
+    type: string;
+    str1: IEditRecordDetails;
+    str2: IEditRecordDetails;
+}
+
+export interface IEditDistanceResult {
+    distance: number;
+    records: Array<IEditRecord>;
+}
+
 /**
  * Notes on implementation below are found at:
  * https://www.cs.jhu.edu/~langmea/resources/lecture_notes/dp_and_edit_dist.pdf
@@ -17,10 +33,10 @@ const EDIT_RECORD_TYPES = {
  * @param {string} str1 
  * @param {string} str2 
  */
-function editDistance(str1, str2) {
+export function editDistance(str1: string, str2: string): IEditDistanceResult {
     const str1Length = str1.length;
     const str2Length = str2.length;
-    const editDistanceMatrix = [];
+    const editDistanceMatrix: Array<Array<number>> = [];
 
     // pre-initialize first column, while initializing all rows in matrix
     for (let i = 0; i <= str2Length; i++) {
@@ -61,7 +77,7 @@ function editDistance(str1, str2) {
     Edit record path, depicts the path to transform
     string 1 -> string 2
 */
-function getEditRecords(editDistanceMatrix, str1, str2) {
+function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, str2: string) {
     const editRecords = [];
     const numRows = (editDistanceMatrix || []).length;
     const numCols = editDistanceMatrix[0].length;
@@ -79,9 +95,9 @@ function getEditRecords(editDistanceMatrix, str1, str2) {
             [NEIGHBOR_LABELS.UPPER]: upperNeighbor,
             [NEIGHBOR_LABELS.LEFT]: leftNeighbor,
         };
-        let recordType;
-        let minNeighborLabel;
-        let minNeighborVal = Number.MAX_VALUE;
+        let recordType: string;
+        let minNeighborLabel: string = '';
+        let minNeighborVal: number = Number.MAX_VALUE;
 
         Object.keys(neighbors)
             .forEach(neighborLabel => {
@@ -139,7 +155,7 @@ function getEditRecords(editDistanceMatrix, str1, str2) {
     return editRecords;
 }
 
-function generateEditRecord(type, str1, str2, i, j) {
+function generateEditRecord(type: string, str1: string, str2: string, i: number, j: number) {
     // console.log(type, str1, str2, i, j);
     return {
         type,
