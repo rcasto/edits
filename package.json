@@ -6,12 +6,19 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.js"
+    "build": "rollup --config rollup.config.js",
+    "test": "jest"
   },
   "author": "Richie Casto (https://github.com/rcasto)",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "7.15.0",
+    "@babel/preset-env": "7.15.0",
+    "@babel/preset-typescript": "7.15.0",
     "@rollup/plugin-typescript": "8.2.5",
+    "@types/jest": "27.0.1",
+    "babel-jest": "27.1.0",
+    "jest": "27.1.0",
     "rollup": "2.56.3",
     "ts-node": "10.2.1",
     "tslib": "2.3.1",
