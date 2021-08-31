@@ -6,8 +6,9 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm-run-all clean build:lib",
+    "build": "npm-run-all clean --parallel build:*",
     "build:lib": "rollup --config rollup.config.js",
+    "build:types": "tsc --emitDeclarationOnly",
     "clean": "rimraf dist",
     "test": "jest",
     "prepublishOnly": "npm-run-all test build"
