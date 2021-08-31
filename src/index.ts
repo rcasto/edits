@@ -1,4 +1,4 @@
-import { EDIT_RECORD_TYPE, IEditDistanceResult, NEIGHBOR_LABEL } from "./schema";
+import { EDIT_RECORD_TYPE, IEditDistanceOptions, IEditDistanceResult, IEditRecord, NEIGHBOR_LABEL } from "./schema";
 
 /**
  * Notes on implementation below are found at:
@@ -7,10 +7,12 @@ import { EDIT_RECORD_TYPE, IEditDistanceResult, NEIGHBOR_LABEL } from "./schema"
  * @param {string} str1 
  * @param {string} str2 
  */
-export function editDistance(str1: string, str2: string): IEditDistanceResult {
+export function editDistance(str1: string, str2: string, options: IEditDistanceOptions = {}): IEditDistanceResult {
     const str1Length = str1.length;
     const str2Length = str2.length;
     const editDistanceMatrix: Array<Array<number>> = [];
+
+    options.returnEditRecords = options.returnEditRecords || false;
 
     // pre-initialize first column, while initializing all rows in matrix
     for (let i = 0; i <= str2Length; i++) {
@@ -40,7 +42,8 @@ export function editDistance(str1: string, str2: string): IEditDistanceResult {
         }
     }
 
-    const editRecords = getEditRecords(editDistanceMatrix, str1, str2);
+    const editRecords: Array<IEditRecord> | undefined = options.returnEditRecords ?
+        getEditRecords(editDistanceMatrix, str1, str2) : undefined;
     return {
         distance: editDistanceMatrix[str2Length][str1Length],
         records: editRecords,
@@ -51,7 +54,7 @@ export function editDistance(str1: string, str2: string): IEditDistanceResult {
     Edit record path, depicts the path to transform
     string 1 -> string 2
 */
-function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, str2: string) {
+function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, str2: string): Array<IEditRecord> {
     const editRecords = [];
     const numRows = (editDistanceMatrix || []).length;
     const numCols = editDistanceMatrix[0].length;
@@ -129,7 +132,7 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
     return editRecords;
 }
 
-function generateEditRecord(type: string, str1: string, str2: string, i: number, j: number) {
+function generateEditRecord(type: string, str1: string, str2: string, i: number, j: number): IEditRecord {
     // console.log(type, str1, str2, i, j);
     return {
         type,

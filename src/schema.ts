@@ -22,7 +22,11 @@ export interface IEditRecord {
     str2: IEditRecordDetails;
 }
 
+export interface IEditDistanceOptions {
+    returnEditRecords?: boolean;
+}
+
 export interface IEditDistanceResult {
     distance: number;
-    records: Array<IEditRecord>;
+    records?: Array<IEditRecord>;
 }
