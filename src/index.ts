@@ -1,30 +1,4 @@
-const NEIGHBOR_LABELS = {
-    UPPER_LEFT: 'upperLeftNeighbor',
-    UPPER: 'upperNeighbor',
-    LEFT: 'leftNeighbor',
-};
-const EDIT_RECORD_TYPES = {
-    MATCH: 'match',
-    ADD: 'add',
-    REPLACE: 'replace',
-    DELETE: 'delete',
-};
-
-interface IEditRecordDetails {
-    index: number;
-    value: string;
-}
-
-export interface IEditRecord {
-    type: string;
-    str1: IEditRecordDetails;
-    str2: IEditRecordDetails;
-}
-
-export interface IEditDistanceResult {
-    distance: number;
-    records: Array<IEditRecord>;
-}
+import { EDIT_RECORD_TYPE, IEditDistanceResult, NEIGHBOR_LABEL } from "./schema";
 
 /**
  * Notes on implementation below are found at:
@@ -90,10 +64,10 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
         const upperLeftNeighbor = editDistanceMatrix[i - 1][j - 1] || 0;
         const upperNeighbor = editDistanceMatrix[i - 1][j] || 0;
         const leftNeighbor = editDistanceMatrix[i][j - 1] || 0;
-        const neighbors = {
-            [NEIGHBOR_LABELS.UPPER_LEFT]: upperLeftNeighbor,
-            [NEIGHBOR_LABELS.UPPER]: upperNeighbor,
-            [NEIGHBOR_LABELS.LEFT]: leftNeighbor,
+        const neighbors: Record<string, number> = {
+            [NEIGHBOR_LABEL.UPPER_LEFT]: upperLeftNeighbor,
+            [NEIGHBOR_LABEL.UPPER]: upperNeighbor,
+            [NEIGHBOR_LABEL.LEFT]: leftNeighbor,
         };
         let recordType: string;
         let minNeighborLabel: string = '';
@@ -111,18 +85,18 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
         const prevJ = j;
 
         switch (minNeighborLabel) {
-            case NEIGHBOR_LABELS.UPPER_LEFT:
+            case NEIGHBOR_LABEL.UPPER_LEFT:
                 recordType = currentNeighbor === upperLeftNeighbor ?
-                    EDIT_RECORD_TYPES.MATCH : EDIT_RECORD_TYPES.REPLACE;
+                    EDIT_RECORD_TYPE.MATCH : EDIT_RECORD_TYPE.REPLACE;
                 i = i - 1;
                 j = j - 1;
                 break;
-            case NEIGHBOR_LABELS.UPPER:
-                recordType = EDIT_RECORD_TYPES.ADD;
+            case NEIGHBOR_LABEL.UPPER:
+                recordType = EDIT_RECORD_TYPE.ADD;
                 i = i - 1;
                 break;
-            case NEIGHBOR_LABELS.LEFT:
-                recordType = EDIT_RECORD_TYPES.DELETE;
+            case NEIGHBOR_LABEL.LEFT:
+                recordType = EDIT_RECORD_TYPE.DELETE;
                 j = j - 1;
                 break;
             default:
@@ -139,7 +113,7 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
         // we add to string 1, otherwise delete
         const isString1LongerThanString2 = j > 0;
         const recordType = isString1LongerThanString2 ?
-            EDIT_RECORD_TYPES.DELETE : EDIT_RECORD_TYPES.ADD;
+            EDIT_RECORD_TYPE.DELETE : EDIT_RECORD_TYPE.ADD;
 
         do {
             editRecords.unshift(generateEditRecord(recordType, str1, str2, i, j));

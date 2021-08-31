@@ -1,7 +1,38 @@
-// console.log(editDistance('foo', 'food'));
-// console.log(editDistance('', ''));
+import { editDistance } from './index';
+import { EDIT_RECORD_TYPE, IEditDistanceResult } from './schema';
 
-// console.log(editDistance('a', ''));
+it('can handle empty strings', () => {
+    const expectedResult: IEditDistanceResult = {
+        distance: 0,
+        records: [],
+    };
+    const result = editDistance('', '');
+
+    expect(result).toEqual(expectedResult);
+});
+
+it('can handle delete edit', () => {
+    const expectedResult: IEditDistanceResult = {
+        distance: 1,
+        records: [{
+            type: EDIT_RECORD_TYPE.DELETE,
+            str1: {
+                index: 0,
+                value: 'a',
+            },
+            str2: {
+                index: -1,
+                value: '',
+            },
+        }],
+    };
+    const result = editDistance('a', '');
+
+    expect(result).toEqual(expectedResult);
+});
+
+// console.log(editDistance('foo', 'food'));
+
 // console.log(editDistance('', 'a'));
 // console.log(editDistance('a', 'b'));
 // console.log(editDistance('a', 'a'));
