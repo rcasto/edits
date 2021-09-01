@@ -3,11 +3,12 @@ import typescript from '@rollup/plugin-typescript';
 export default {
   input: 'src/index.ts',
   output: [{
-    format: 'cjs',
-    file: 'dist/index.umd.js'
+    format: 'umd',
+    file: 'dist/index.umd.js',
+    name: 'Edits',
   }, {
     format: 'es',
-    file: 'dist/index.es.js'
+    file: 'dist/index.es.js',
   }],
-  plugins: [typescript()]
+  plugins: [typescript()],
 };
