@@ -38,6 +38,9 @@ function animateTextTransform(textStart, textEnd) {
     let characterOffset = 0;
     let isProcessingRecord = false;
 
+    textDom.style.display = 'flex';
+    textDom.style.alignSelf = 'center';
+
     async function animate() {
         if (recordIndex < numRecords) {
             window.requestAnimationFrame(animate);
@@ -117,6 +120,6 @@ function animateTextTransform(textStart, textEnd) {
 const {
     elem: test2,
     startAnimation: test2Func
-} = animateTextTransform('Hello', 'World');
+} = animateTextTransform('hello', 'world');
 document.body.appendChild(test2);
 test2Func();
