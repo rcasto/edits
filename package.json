@@ -6,7 +6,7 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "http-server -p 3000 ./",
+    "start": "http-server -p 3000 ./docs",
     "build": "npm-run-all clean --parallel build:*",
     "build:lib": "rollup --config rollup/rollup.config.js",
     "build:lib-min": "rollup --config rollup/rollup.config.min.js",
