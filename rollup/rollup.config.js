@@ -9,6 +9,11 @@ export default {
       name: 'Edits',
     },
     {
+      format: 'umd',
+      file: 'docs/index.umd.js',
+      name: 'Edits',
+    },
+    {
       format: 'es',
       file: 'dist/index.es.js',
     }
