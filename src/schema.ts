@@ -17,7 +17,7 @@ export interface IEditRecordDetails {
 }
 
 export interface IEditRecord {
-    type: string;
+    type: EDIT_RECORD_TYPE;
     str1: IEditRecordDetails;
     str2: IEditRecordDetails;
 }

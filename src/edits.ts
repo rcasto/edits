@@ -72,7 +72,7 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
             [NEIGHBOR_LABEL.UPPER]: upperNeighbor,
             [NEIGHBOR_LABEL.LEFT]: leftNeighbor,
         };
-        let recordType: string;
+        let recordType: EDIT_RECORD_TYPE;
         let minNeighborLabel: string = '';
         let minNeighborVal: number = Number.MAX_VALUE;
 
@@ -132,7 +132,7 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
     return editRecords;
 }
 
-function generateEditRecord(type: string, str1: string, str2: string, i: number, j: number): IEditRecord {
+function generateEditRecord(type: EDIT_RECORD_TYPE, str1: string, str2: string, i: number, j: number): IEditRecord {
     // console.log(type, str1, str2, i, j);
     return {
         type,
