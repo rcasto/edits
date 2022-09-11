@@ -1,26 +1,3 @@
-const editsDemoContainer = document.getElementById('edits-demo');
-
-/**'
- * Types of edit records:
- * - Add
- * - Delete
- * - Match
- * - Replace
- * 
- * Add = translateX?
- * Delete = translateX, opposite direction of add?
- * Match = scale, then descale, emphasize
- * Replace = Slide up out, slide back down, or opacity out, opacity in, both switching value
- */
-
-/**
- * Animation State:
- * - Filter function
- * - Animation itself
- * - Description?
- * - Custom Data
- */
-
 function AnimateSubset({
     animation,
     animationOptions,
@@ -135,11 +112,7 @@ function EditText({
                 animationOptions={currentAnimation && currentAnimation.animationOptions}
                 animationFilter={currentAnimation && currentAnimation.filterFunc}
                 onAnimationFinished={handleAnimationFinished}>
-                {(currentText || '').split('').map((character, index) => (
-                    <span key={`${character}:${index}`} style={{
-                        display: 'inline-block',
-                    }}>{character}</span>
-                ))}
+                {(currentText || '').split('').map(createCharacterElem)}
             </AnimateSubset>
         </div>
     );
@@ -192,11 +165,16 @@ function App() {
                     value={endWord}
                     onChange={handleChangeEndWord} />
                 <EditText
-                    startText={'Hello!'}
-                    endText={'Goodbye!'} />
+                    startText={'Hey there!'}
+                    endText={'Hey! You!'} />
             </main>
         </React.Fragment>
     );
 }
 
-ReactDOM.render(<App />, editsDemoContainer);
+function init() {
+    const editsDemoContainer = document.getElementById('edits-demo');
+    ReactDOM.render(<App />, editsDemoContainer);
+}
+
+init();

@@ -108,3 +108,22 @@ function postAddEditRecordAnimation(editRecord) {
         newTextSetter(currentText => currentText.slice(0, characterIndex).concat(character).concat(currentText.slice(characterIndex)))
     };
 }
+
+function createCharacterElem(character, index) {
+    const key = `${character}:${index}`;
+
+    if (character === ' ') {
+        return React.createElement('span', {
+            key,
+            style: characterStyle,
+            dangerouslySetInnerHTML: {
+                __html: '&nbsp;',
+            },
+        }, null);
+    }
+
+    return React.createElement('span', {
+        key,
+        style: characterStyle,
+    }, character);
+}
