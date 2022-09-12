@@ -6,6 +6,7 @@ function AnimateSubset({
     onAnimationFinished,
 }) {
     const containerRef = React.useRef(null)
+    const timeoutRef = React.useRef(null)
 
     React.useEffect(() => {
         if (!containerRef || !containerRef.current) {
@@ -40,12 +41,18 @@ function AnimateSubset({
             filteredContainerElemAnimations[0].addEventListener('finish', handleOnAnimationFinish);
 
             filteredContainerElemAnimations.forEach(filteredContainerElemAnimation => filteredContainerElemAnimation.play())
+        } else {
+            // No elems to animate, but we still want to signal that the animation has
+            // finished for consistency sake
+            timeoutRef.current = window.setTimeout(handleOnAnimationFinish, ANIMATION_DURATION);
         }
 
         return () => {
             if (filteredContainerElemAnimations.length) {
                 filteredContainerElemAnimations[0].removeEventListener('finish', handleOnAnimationFinish);
             }
+
+            window.clearTimeout(timeoutRef.current)
         }
     }, [children, animation, animationOptions, animationFilter, onAnimationFinished])
 
@@ -88,10 +95,10 @@ function EditText({
 
     // Make sure currentText state is synced up
     // with latest input startText
-    // React.useEffect(() => {
-    //     setCurrentText(null);
-    //     setCurrentText(startText)
-    // }, [startText])
+    React.useEffect(() => {
+        setCurrentText(null);
+        setCurrentText(startText)
+    }, [startText, endText]);
 
     React.useEffect(() => {
         const animationRecords = (editRecords.records || [])
@@ -140,6 +147,9 @@ function App() {
     const [startWord, setStartWord] = React.useState('');
     const [endWord, setEndWord] = React.useState('');
 
+    const [currentStart, setCurrentStart] = React.useState('');
+    const [currentEnd, setCurrentEnd] = React.useState('');
+
     const handleChangeStartWord = React.useCallback((text) => {
         setStartWord(text)
     }, [])
@@ -147,6 +157,19 @@ function App() {
     const handleChangeEndWord = React.useCallback((text) => {
         setEndWord(text)
     }, [])
+
+    const handleOnGo = React.useCallback(() => {
+        // Trigger re-render/reset of EditText component
+        setCurrentStart('');
+        setCurrentEnd('');
+
+        // Maybe brainfarting right now
+        // but this hack works for the moment
+        window.setTimeout(() => {
+            setCurrentStart(startWord);
+            setCurrentEnd(endWord);
+        }, 0);
+    }, [startWord, endWord]);
 
     return (
         <React.Fragment>
@@ -164,9 +187,12 @@ function App() {
                     placeholder="World"
                     value={endWord}
                     onChange={handleChangeEndWord} />
-                <EditText
-                    startText={'Hey there!'}
-                    endText={'Hey! You!'} />
+                <button onClick={handleOnGo}>Go</button>
+                {currentStart && currentEnd && (
+                    <EditText
+                        startText={currentStart}
+                        endText={currentEnd} />
+                )}
             </main>
         </React.Fragment>
     );
