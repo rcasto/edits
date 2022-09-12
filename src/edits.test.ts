@@ -170,3 +170,37 @@ it('can handle multiple edits together', () => {
 
     expect(result).toEqual(expectedResult);
 });
+
+it('can handle multiple edits one of which is a delete edit record', () => {
+    const expectedResult: IEditDistanceResult = {
+        distance: 2,
+        records: [{
+            type: EDIT_RECORD_TYPE.DELETE,
+            str1: {
+                index: 0,
+                value: 'b',
+            },
+            str2: {
+                index: -1,
+                value: '',
+            },
+            transformIndex: 0,
+        }, {
+            type: EDIT_RECORD_TYPE.REPLACE,
+            str1: {
+                index: 1,
+                value: 'b',
+            },
+            str2: {
+                index: 0,
+                value: 'a',
+            },
+            transformIndex: 0,
+        }],
+    };
+    const result = editDistance('bb', 'a', {
+        returnEditRecords: true,
+    });
+
+    expect(result).toEqual(expectedResult);
+});
