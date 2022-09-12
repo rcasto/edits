@@ -1,7 +1,12 @@
 body {
-    /* font-size: 120px; */
+    font-size: 32px;
     display: flex;
     justify-content: center;
     height: 100%;
     font-family: monospace;
+}
+
+#edits-demo {
+    display: flex;
+    align-items: center;
 }

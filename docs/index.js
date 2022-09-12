@@ -230,9 +230,6 @@ function AppDemo() {
 
     return (
         <React.Fragment>
-            <header>
-                <h1>edits playground</h1>
-            </header>
             <main>
                 {(
                     <EditText

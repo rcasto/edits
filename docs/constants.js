@@ -26,7 +26,7 @@ const characterStyle = {
     display: 'inline-block',
 };
 
-const ANIMATION_DURATION = 100;
+const ANIMATION_DURATION = 50;
 const DELAY_BETWEEN_PHRASES_IN_MILLISECONDS = 5000;
 
 const quotes = [
@@ -35,4 +35,20 @@ const quotes = [
     'Wisely, and slow. They stumble that run fast. William Shakespeare',
 
     'If you judge people, you have no time to love them. Mother Teresa',
+
+    'Whenever you find yourself on the side of the majority, it is time to pause and reflect. Mark Twain',
+
+    'All that we are is the result of what we have thought. Buddha',
+
+    'The most courageous act is still to think for yourself. Aloud. Coco Chanel',
+
+    'Stay hungry, stay foolish. Steve Jobs',
+
+    'The greatest wealth is to live content with little. Plato',
+
+    'The future belongs to those who prepare for it today. Malcolm X',
+
+    'The successful warrior is the average man, with laser-like focus. Bruce Lee',
+
+    'A great man is always willing to be little. Ralph Waldo Emerson',
 ]
