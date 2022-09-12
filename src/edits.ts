@@ -61,13 +61,14 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
 
     let i = numRows - 1;
     let j = numCols - 1;
+    let transformIndex = str2.length;
 
     while (i > 0 && j > 0) {
         const currentNeighbor = editDistanceMatrix[i][j];
         const upperLeftNeighbor = editDistanceMatrix[i - 1][j - 1] || 0;
         const upperNeighbor = editDistanceMatrix[i - 1][j] || 0;
         const leftNeighbor = editDistanceMatrix[i][j - 1] || 0;
-        const neighbors: Record<string, number> = {
+        const neighbors: Record<NEIGHBOR_LABEL, number> = {
             [NEIGHBOR_LABEL.UPPER_LEFT]: upperLeftNeighbor,
             [NEIGHBOR_LABEL.UPPER]: upperNeighbor,
             [NEIGHBOR_LABEL.LEFT]: leftNeighbor,
@@ -76,13 +77,12 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
         let minNeighborLabel: string = '';
         let minNeighborVal: number = Number.MAX_VALUE;
 
-        Object.keys(neighbors)
-            .forEach(neighborLabel => {
-                if (neighbors[neighborLabel] < minNeighborVal) {
-                    minNeighborVal = neighbors[neighborLabel];
-                    minNeighborLabel = neighborLabel;
-                }
-            });
+        for (const [neighborLabel, neighborVal] of Object.entries(neighbors)) {
+            if (neighborVal < minNeighborVal) {
+                minNeighborVal = neighborVal;
+                minNeighborLabel = neighborLabel;
+            }
+        }
 
         const prevI = i;
         const prevJ = j;
@@ -103,10 +103,12 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
                 j = j - 1;
                 break;
             default:
-                throw new Error(`Invalid label ${minNeighborLabel}`);
+                throw new Error(`Invalid neighbor label ${minNeighborLabel}`);
         }
 
-        editRecords.unshift(generateEditRecord(recordType, str1, str2, prevI, prevJ));
+        const editRecord = generateEditRecord(recordType, str1, str2, prevI, prevJ, transformIndex);
+        transformIndex = editRecord.transformIndex;
+        editRecords.unshift(editRecord);
     }
 
     // 1 string is a subset of the other, remaining
@@ -119,7 +121,9 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
             EDIT_RECORD_TYPE.DELETE : EDIT_RECORD_TYPE.ADD;
 
         do {
-            editRecords.unshift(generateEditRecord(recordType, str1, str2, i, j));
+            const editRecord = generateEditRecord(recordType, str1, str2, i, j, transformIndex);
+            transformIndex = editRecord.transformIndex;
+            editRecords.unshift(editRecord);
 
             if (isString1LongerThanString2) {
                 j--;
@@ -132,7 +136,7 @@ function getEditRecords(editDistanceMatrix: Array<Array<number>>, str1: string, 
     return editRecords;
 }
 
-function generateEditRecord(type: EDIT_RECORD_TYPE, str1: string, str2: string, i: number, j: number): IEditRecord {
+function generateEditRecord(type: EDIT_RECORD_TYPE, str1: string, str2: string, i: number, j: number, transformIndex: number): IEditRecord {
     // console.log(type, str1, str2, i, j);
     return {
         type,
@@ -144,5 +148,21 @@ function generateEditRecord(type: EDIT_RECORD_TYPE, str1: string, str2: string, 
             index: i - 1,
             value: str2[i - 1] || ''
         },
+        transformIndex: getNextTransformIndexForEditRecord(type, transformIndex),
     };
+}
+
+function getNextTransformIndexForEditRecord(type: EDIT_RECORD_TYPE, currentTranformIndex: number): number {
+    switch (type) {
+        case EDIT_RECORD_TYPE.ADD:
+            return currentTranformIndex - 1;
+        case EDIT_RECORD_TYPE.DELETE:
+            return currentTranformIndex;
+        case EDIT_RECORD_TYPE.REPLACE:
+            return currentTranformIndex - 1;
+        case EDIT_RECORD_TYPE.MATCH:
+            return currentTranformIndex - 1;
+        default:
+            throw new Error(`Invalid edit record type ${type}`);
+    }
 }

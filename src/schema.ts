@@ -20,6 +20,7 @@ export interface IEditRecord {
     type: EDIT_RECORD_TYPE;
     str1: IEditRecordDetails;
     str2: IEditRecordDetails;
+    transformIndex: number;
 }
 
 export interface IEditDistanceOptions {
