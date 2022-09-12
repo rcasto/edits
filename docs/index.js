@@ -66,6 +66,8 @@ function AnimateSubset({
 function EditText({
     startText,
     endText,
+    delayInMilliseconds,
+    onAnimationFinished,
 }) {
     const [currentText, setCurrentText] = React.useState(startText);
     const [currentAnimation, setCurrentAnimation] = React.useState(null);
@@ -73,6 +75,7 @@ function EditText({
     const editRecords = React.useMemo(() => Edits.editDistance(startText, endText, {
         returnEditRecords: true,
     }), [startText, endText])
+    const delayRef = React.useRef(null);
 
     const handleAnimationFinished = React.useCallback((containerElem) => {        
         const nextAnimation = animationQueue
@@ -84,6 +87,10 @@ function EditText({
             setCurrentAnimation(null);
 
             currentAnimation.postFunc(containerElem, setCurrentText);
+        }
+
+        if (!nextAnimation) {
+            onAnimationFinished && onAnimationFinished();
         }
 
         setCurrentAnimation(nextAnimation)
@@ -106,10 +113,22 @@ function EditText({
                 return currAnimationRecords.concat(generateEditRecordAnimations(editRecord));
             }, []);
 
-        console.log(editRecords, animationRecords, currentText, startText, endText);
+        // console.log(editRecords, animationRecords, currentText, startText, endText);
 
-        setAnimationQueue(animationRecords);
-        setCurrentAnimation(animationRecords[0]);
+        if (delayInMilliseconds) {
+            window.clearTimeout(delayRef.current);
+            delayRef.current = window.setTimeout(() => {
+                setAnimationQueue(animationRecords);
+                setCurrentAnimation(animationRecords[0]);
+            }, delayInMilliseconds);
+        } else {
+            setAnimationQueue(animationRecords);
+            setCurrentAnimation(animationRecords[0]);
+        }
+
+        return () => {
+            window.clearTimeout(delayRef.current);
+        };
     }, [editRecords]);
 
     return (
@@ -198,9 +217,38 @@ function App() {
     );
 }
 
+function AppDemo() {
+    const [currentPhraseIndex, setCurrentPhraseIndex] = React.useState(0);
+    const [nextPhraseIndex, setNextPhraseIndex] = React.useState(1);
+
+    const phrasesRef = React.useRef(quotes);
+
+    const handleAnimationFinished = React.useCallback(() => {
+        setCurrentPhraseIndex(cpi => (cpi + 1) % phrasesRef.current.length);
+        setNextPhraseIndex(npi => (npi + 1) % phrasesRef.current.length);
+    }, []);
+
+    return (
+        <React.Fragment>
+            <header>
+                <h1>edits playground</h1>
+            </header>
+            <main>
+                {(
+                    <EditText
+                        startText={phrasesRef.current[currentPhraseIndex]}
+                        endText={phrasesRef.current[nextPhraseIndex]}
+                        delayInMilliseconds={DELAY_BETWEEN_PHRASES_IN_MILLISECONDS}
+                        onAnimationFinished={handleAnimationFinished} />
+                )}
+            </main>
+        </React.Fragment>
+    );
+}
+
 function init() {
     const editsDemoContainer = document.getElementById('edits-demo');
-    ReactDOM.render(<App />, editsDemoContainer);
+    ReactDOM.render(<AppDemo />, editsDemoContainer);
 }
 
 init();
