@@ -14,7 +14,7 @@ function generateEditRecordAnimations(editRecord) {
 }
 
 function generateDeleteEditRecordAnimations(editRecord) {
-    const characterIndex = editRecord.str1.index;
+    const characterIndex = editRecord.transformIndex;
 
     return [
         {
@@ -31,7 +31,7 @@ function generateDeleteEditRecordAnimations(editRecord) {
 }
 
 function generateAddEditRecordAnimations(editRecord) {
-    const characterIndex = editRecord.str1.index;
+    const characterIndex = editRecord.transformIndex;
 
     return [
         {
@@ -49,7 +49,7 @@ function generateAddEditRecordAnimations(editRecord) {
 }
 
 function generateReplaceEditRecordAnimations(editRecord) {
-    const characterIndex = editRecord.str1.index;
+    const characterIndex = editRecord.transformIndex;
 
     return [
         {
@@ -67,7 +67,7 @@ function generateReplaceEditRecordAnimations(editRecord) {
 }
 
 function generateMatchEditRecordAnimations(editRecord) {
-    const characterIndex = editRecord.str1.index;
+    const characterIndex = editRecord.transformIndex;
 
     return [
         {
@@ -84,7 +84,7 @@ function generateMatchEditRecordAnimations(editRecord) {
 }
 
 function postReplaceEditRecordAnimation(editRecord) {
-    const characterIndex = editRecord.str1.index;
+    const characterIndex = editRecord.transformIndex;
     const character = editRecord.str2.value;
 
     return (containerElem, newTextSetter) => {
@@ -93,7 +93,7 @@ function postReplaceEditRecordAnimation(editRecord) {
 }
 
 function postDeleteEditRecordAnimation(editRecord) {
-    const characterIndex = editRecord.str1.index;
+    const characterIndex = editRecord.transformIndex;
 
     return (containerElem, newTextSetter) => {
         newTextSetter(currentText => currentText.slice(0, characterIndex).concat(currentText.slice(characterIndex + 1)));
@@ -101,7 +101,7 @@ function postDeleteEditRecordAnimation(editRecord) {
 }
 
 function postAddEditRecordAnimation(editRecord) {
-    const characterIndex = editRecord.str1.index + 1;
+    const characterIndex = editRecord.transformIndex;
     const character = editRecord.str2.value;
 
     return (containerElem, newTextSetter) => {
