@@ -26,4 +26,4 @@ const characterStyle = {
     display: 'inline-block',
 };
 
-const ANIMATION_DURATION = 4000;
+const ANIMATION_DURATION = 400;
