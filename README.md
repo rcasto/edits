@@ -16,41 +16,44 @@ console.log(distance);
 console.log(JSON.stringify(records || [], null, '\t'));
 /* Console Output
 2
-"[
-    {
-        'type': 'replace',
-        'str1': {
-            'index': 0,
-            'value': 'a'
-        },
-        'str2': {
-            'index': 0,
-            'value': 'b'
-        }
-    },
-    {
-        'type': 'replace',
-        'str1': {
-            'index': 1,
-            'value': 'r'
-        },
-        'str2': {
-            'index': 1,
-            'value': 'a'
-        }
-    },
-    {
-        'type': 'match',
-        'str1': {
-            'index': 2,
-            'value': 't'
-        },
-        'str2': {
-            'index': 2,
-            'value': 't'
-        }
-    }
-]"
+[
+	{
+		"type": "replace",
+		"str1": {
+			"index": 0,
+			"value": "a"
+		},
+		"str2": {
+			"index": 0,
+			"value": "b"
+		},
+		"transformIndex": 0
+	},
+	{
+		"type": "replace",
+		"str1": {
+			"index": 1,
+			"value": "r"
+		},
+		"str2": {
+			"index": 1,
+			"value": "a"
+		},
+		"transformIndex": 1
+	},
+	{
+		"type": "match",
+		"str1": {
+			"index": 2,
+			"value": "t"
+		},
+		"str2": {
+			"index": 2,
+			"value": "t"
+		},
+		"transformIndex": 2
+	}
+]
 */
 ```
 
@@ -60,8 +63,9 @@ If you are using `edits` in the browser, then you will want to reference the bro
 console.log(Edits.editDistance('foo', 'bar'));
 ```
 
-Example:  
-https://codepen.io/rcasto/pen/qBjZOga?editors=0012
+### Demos/Examples:  
+- https://rcasto.github.io/edits/
+- https://codepen.io/rcasto/pen/qBjZOga?editors=0012
 
 ## Edit Records
 Edit records represent individual operations taken along determining the edit distance between string1 and string2.
