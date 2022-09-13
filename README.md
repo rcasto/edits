@@ -65,6 +65,7 @@ console.log(Edits.editDistance('foo', 'bar'));
 
 ### Demos/Examples:  
 - https://rcasto.github.io/edits/
+    - https://codepen.io/rcasto/full/MWGjPzR
 - https://codepen.io/rcasto/pen/qBjZOga?editors=0012
 
 ## Edit Records
